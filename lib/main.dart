@@ -1,3 +1,4 @@
+import 'package:fitforalegend_provider/const/providers.dart';
 import 'package:fitforalegend_provider/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,17 +12,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FFL provider',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return AppProviders.getProviders(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'FFL provider',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        builder: (context, widget) {
+          return ScrollConfiguration(
+              behavior: const ScrollBehaviorModified(), child: widget!);
+        },
+        home: const SplashScreen(),
       ),
-      builder: (context, widget) {
-        return ScrollConfiguration(
-            behavior: const ScrollBehaviorModified(), child: widget!);
-      },
-      home: const SplashScreen(),
     );
   }
 }
