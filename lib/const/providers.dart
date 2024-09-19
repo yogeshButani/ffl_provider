@@ -1,3 +1,4 @@
+import 'package:fitforalegend_provider/provider/dasboard_bottombar_provider.dart';
 import 'package:fitforalegend_provider/provider/login_provider.dart';
 import 'package:fitforalegend_provider/provider/onboarding_provider.dart';
 import 'package:fitforalegend_provider/provider/register_verification_provider.dart';
@@ -18,6 +19,7 @@ class AppProviders {
         ChangeNotifierProvider(create: (_) => SharedPreferencesProvider()),
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => RegisterVerificationProvider()),
+        ChangeNotifierProvider(create: (_) => DashboardBottomBarProvider()),
         // Add more providers as needed
       ],
       child: child,

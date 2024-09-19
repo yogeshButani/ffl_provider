@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class DashboardBottomBarProvider extends ChangeNotifier {
-  int _selectedTab = 0;
+  int selectedTab = 0;
 
-  int get currentTab => _selectedTab;
+  int get currentTab => selectedTab;
 
   void onTap(int index) {
-    _selectedTab = index;
+    selectedTab = index;
     notifyListeners();
   }
 }
