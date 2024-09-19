@@ -1,6 +1,10 @@
 import 'package:fitforalegend_provider/const/app_colors.dart';
+import 'package:fitforalegend_provider/const/app_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Utility {
   static bool isEmail(String em) {
     String p =
@@ -26,13 +30,27 @@ class Utility {
     }
   }
 
+   Future<bool> isInternetConnected() async {
+    bool isConnected = await InternetConnection().hasInternetAccess;
+    if (!isConnected) {
+      Utility().getToast('No Internet');
+    }
+    return isConnected;
+  }
+
   getToast(msg) {
     Fluttertoast.showToast(
-      backgroundColor: AppColors.color17C6AA,
+      backgroundColor: AppColors.colorBlack,
       msg: msg.toString(),
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 3,
     );
+  }
+
+  Future<String> getAccessToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString(AppStorage.token) ?? '';
+    return token;
   }
 }

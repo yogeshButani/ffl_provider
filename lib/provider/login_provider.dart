@@ -1,47 +1,82 @@
+import 'dart:developer';
+
+import 'package:fitforalegend_provider/const/app_storage.dart';
+import 'package:fitforalegend_provider/const/app_storage_manager.dart';
 import 'package:fitforalegend_provider/const/utils.dart';
 import 'package:fitforalegend_provider/provider/splash_provider.dart';
 import 'package:fitforalegend_provider/screens/dashboard_screen.dart';
+import 'package:fitforalegend_provider/services/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginProvider extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
 
-  String get email => emailController.text;
 
-  String get password => passwordController.text;
-
-  void onChangeEmail(String value) {
-    emailController.text = value;
-    notifyListeners();
-  }
-
-  void onChangePassword(String value) {
-    passwordController.text = value;
-    notifyListeners();
-  }
-
-  void validate(BuildContext context) {
-    String email = emailController.text.toString();
-    String password = passwordController.text.toString();
+  String? validateInputs() {
+    String email = emailController.text.trim();
+    String password = passwordController.text;
     if (email.isEmpty) {
-      Utility().getToast('Please enter email');
+      return 'Please enter email';
     } else if (password.isEmpty) {
-      Utility().getToast('Please enter password');
+      return 'Please enter password';
     } else if (password.length < 6) {
-      Utility().getToast('Entered password should be of 6 digit');
+      return 'Password should be at least 6 characters';
+    }
+    return null;
+  }
+
+  void validateAndSubmit(BuildContext context) {
+    String? validationError = validateInputs();
+    if (validationError != null) {
+      Utility().getToast(validationError);
     } else {
-      onLogin(context);
+      login(context);
     }
   }
 
-  onLogin(BuildContext context) {
-    Provider.of<SplashProvider>(context,listen: false).setUserLogin(true);
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const DashboardScreen(selectedIndex: 0)),
-        (route) => false);
+  Future<void> login(BuildContext context) async {
+    isLoading = true;
+    notifyListeners();
+    Map<String, dynamic> body = {};
+    body = {
+      'email_or_phone': emailController.text.toString(),
+      'password': passwordController.text.toString(),
+      'fcm_token': 'static_fcm',
+      'device_id': 'test_123',
+      'device_type': 'android',
+      'time_zone': 'Asia/Kolkata',
+    };
+    var jsonResponse = await Api.loginApi(body);
+    isLoading = false;
+    if (jsonResponse['status'] == true) {
+      log('jsonResponse success>>>${jsonResponse.toString()}');
+      if (context.mounted) {
+        Provider.of<SplashProvider>(context, listen: false).setUserLogin(true);
+      }
+      if (context.mounted) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const DashboardScreen(selectedIndex: 0)),
+            (route) => false);
+      }
+      StorageManager.saveData(AppStorage.userName,
+          '${jsonResponse['data']['first_name']} ${jsonResponse['data']['last_name']}');
+      StorageManager.saveData(
+          AppStorage.userEmail, jsonResponse['data']['email']);
+      StorageManager.saveData(AppStorage.userId, jsonResponse['data']['id']);
+      StorageManager.saveData(
+          AppStorage.userMobile, jsonResponse['data']['mobile']);
+      StorageManager.saveData(
+          AppStorage.userGender, jsonResponse['data']['gender']);
+      StorageManager.saveData(AppStorage.token, jsonResponse['data']['token']);
+    } else {
+      isLoading = false;
+      log('jsonResponse failed>>>${jsonResponse.toString()}');
+    }
+    notifyListeners();
   }
 }
