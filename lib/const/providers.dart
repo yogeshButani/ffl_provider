@@ -4,6 +4,7 @@ import 'package:fitforalegend_provider/provider/onboarding_provider.dart';
 import 'package:fitforalegend_provider/provider/register_verification_provider.dart';
 import 'package:fitforalegend_provider/provider/shared_preferences_provider.dart';
 import 'package:fitforalegend_provider/provider/splash_provider.dart';
+import 'package:fitforalegend_provider/provider/user_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ class AppProviders {
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => RegisterVerificationProvider()),
         ChangeNotifierProvider(create: (_) => DashboardBottomBarProvider()),
+        ChangeNotifierProvider(create: (_) => UserProfileProvider()),
         // Add more providers as needed
       ],
       child: child,

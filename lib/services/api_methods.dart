@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:dio/dio.dart';
 import 'package:fitforalegend_provider/const/utils.dart';
 import 'package:fitforalegend_provider/services/api_urls.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class ApiMethods {
   static final ApiMethods _apiClient = ApiMethods._internal();
-
+  final dio = Dio();
   factory ApiMethods() {
     return _apiClient;
   }
@@ -124,32 +126,41 @@ class ApiMethods {
   Future<String> postMultipartMethod({
     required String method,
     required Map<String, String> body,
-    required List<http.MultipartFile> files,
+    required List<MultipartFile> files,
     required String mapKeyFile,
     required Map<String, String> header,
   }) async {
     if (await Utility().isInternetConnected()) {
       try {
-        /// HTTP Code commit
+        final formData = FormData();
 
-        final uri = Uri.parse(method);
-        /*
-        log('PostMultipart Request url: $method');
-        log('Request header: $header');
-        log('Request body: $body');
-        log('Request bodyJson: ${jsonEncode(body)}');
-        log('Request files: ${files.toString()}');
-         */
-        var request = http.MultipartRequest('POST', uri);
-        request.files.addAll(files);
-        request.fields.addAll(body);
-        request.headers.addAll(header);
-        final response = await request.send();
-        final result = await http.Response.fromStream(response);
-        /*
-        log('$method >>>>Response body:${result.body} <<<<');
-         */
-        return result.body;
+        // Add text fields
+        body.forEach((key, value) {
+          formData.fields.add(MapEntry(key, value));
+        });
+
+        // Add file fields
+        for (var file in files) {
+          if (files.isNotEmpty) {
+            formData.files.add(MapEntry(mapKeyFile, file));
+            debugPrint('Adding file: ${file.filename}');
+          }
+        }
+
+        debugPrint('FormData: ${formData.fields.toString()}');
+        debugPrint('FormData Files: ${formData.files.toString()}');
+
+        final response = await dio.post(
+          method,
+          data: formData,
+          options: Options(
+            headers: {
+              ...header,
+              'Content-Type': 'multipart/form-data',
+            },
+          ),
+        );
+        return jsonEncode(response.data);
       } catch (e) {
         log('postMultipartMethod error---$method>>>>> ${e.toString()}<<<<<<');
         return '';
@@ -159,6 +170,8 @@ class ApiMethods {
       return '';
     }
   }
+
+
 
   /// HTTP Code commit
 

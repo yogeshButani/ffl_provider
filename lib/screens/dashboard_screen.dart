@@ -1,5 +1,10 @@
 import 'package:fitforalegend_provider/const/app_colors.dart';
 import 'package:fitforalegend_provider/provider/dasboard_bottombar_provider.dart';
+import 'package:fitforalegend_provider/screens/tab_1_home_screen.dart';
+import 'package:fitforalegend_provider/screens/tab_2_cart_screen.dart';
+import 'package:fitforalegend_provider/screens/tab_3_favorite_screen.dart';
+import 'package:fitforalegend_provider/screens/tab_4_raffle_screen.dart';
+import 'package:fitforalegend_provider/screens/tab_5_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -77,24 +82,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       ),
-      body: getPage(
-          Provider.of<DashboardBottomBarProvider>(context, listen: false)
-              .currentTab),
+      body: getPage(Provider.of<DashboardBottomBarProvider>(context, listen: true).currentTab),
     );
   }
 
   Widget getPage(int index) {
+    debugPrint('index>>$index');
     switch (index) {
       case 0:
-        return Container();
+        return const Tab1HomeScreen();
       case 1:
-        return Container();
+        return const Tab2CartScreen();
       case 2:
-        return Container();
+        return const Tab3FavoriteScreen();
       case 3:
-        return Container();
+        return const Tab4RaffleScreen();
       case 4:
-        return Container();
+        return  const Tab5ProfileScreen();
       default:
         return Container();
     }

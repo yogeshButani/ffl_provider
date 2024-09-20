@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:fitforalegend_provider/const/app_colors.dart';
 import 'package:fitforalegend_provider/const/app_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,12 +33,29 @@ class Utility {
     }
   }
 
-   Future<bool> isInternetConnected() async {
+  Future<bool> isInternetConnected() async {
     bool isConnected = await InternetConnection().hasInternetAccess;
     if (!isConnected) {
       Utility().getToast('No Internet');
     }
     return isConnected;
+  }
+
+  Future<File?> getImageFromGallery(BuildContext context) async {
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+    File? image;
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+    } else {
+      if (context.mounted) {
+        Utility().getToast("Please select an image for editing");
+      }
+    }
+
+    return image;
   }
 
   getToast(msg) {
