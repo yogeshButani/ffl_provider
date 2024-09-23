@@ -24,9 +24,16 @@ class UserProfileProvider extends ChangeNotifier {
 
     res = await Api.userProfileApi();
     if (res.status == true) {
+      setValues();
     } else {}
 
     isLoading = false;
+    notifyListeners();
+  }
+
+  setValues() {
+    firstNameController.text = res.data?.firstName ?? '';
+    genderController.text = res.data?.gender ?? '';
     notifyListeners();
   }
 

@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:fitforalegend_provider/models/response_get_user_profile.dart';
+import 'package:fitforalegend_provider/models/response_home.dart';
 import 'package:fitforalegend_provider/services/api_methods.dart';
 import 'package:fitforalegend_provider/services/api_urls.dart';
 import 'package:flutter/cupertino.dart';
@@ -170,4 +171,50 @@ class Api {
       return {};
     }
   }
+
+  static Future<HomeResponse> homeApi({
+    required Map<String, String> body,
+  }) async {
+    var header = ApiMethods.getHeaderWithoutToken();
+
+    String res = await _apiClient.getMethod(
+      method: ApiServices.homeApi,
+      body: body,
+      header: header,
+    );
+    debugPrint('token is>>${header.toString()}');
+    log('JSON response: $res');
+
+    if (res.isNotEmpty) {
+      try {
+        return HomeResponse.fromJson(json.decode(res));
+      } catch (e) {
+        return HomeResponse(status: false, message: 'Something went wrong');
+      }
+    } else {
+      return HomeResponse(status: false, message: 'Something went wrong');
+    }
+  }
+
+  static Future<Map<String, dynamic>> favoriteProduct({
+    required Map<String, String> body,
+  }) async {
+    var header = await ApiMethods.getHeaderWithToken();
+
+    String res = await _apiClient.postMethod(
+      method: ApiServices.addToWishlist,
+      body: body,
+      header: header,
+    );
+    if (res.isNotEmpty) {
+      try {
+        return jsonDecode(res);
+      } catch (e) {
+        return {};
+      }
+    } else {
+      return {};
+    }
+  }
+
 }
