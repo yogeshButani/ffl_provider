@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:fitforalegend_provider/const/utils.dart';
 import 'package:fitforalegend_provider/models/response_get_user_profile.dart';
 import 'package:fitforalegend_provider/models/response_home.dart';
 import 'package:fitforalegend_provider/services/api_methods.dart';
@@ -33,9 +34,11 @@ class Api {
       try {
         return jsonDecode(res);
       } catch (e) {
+        Utility().getToast('exception>> $e');
         return {};
       }
     } else {
+      Utility().getToast('FAILED');
       return {};
     }
   }

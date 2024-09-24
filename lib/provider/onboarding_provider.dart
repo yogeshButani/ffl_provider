@@ -37,7 +37,6 @@ class OnBoardingProvider extends ChangeNotifier {
 
   void currentPage() {
     pageController = PageController(initialPage: onTapIndex);
-    notifyListeners();
   }
 
   void nextPage(BuildContext context) {

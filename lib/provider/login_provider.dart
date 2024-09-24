@@ -76,6 +76,7 @@ class LoginProvider extends ChangeNotifier {
     } else {
       isLoading = false;
       log('jsonResponse failed>>>${jsonResponse.toString()}');
+      Utility().getToast('${jsonResponse['message']}');
     }
     notifyListeners();
   }
