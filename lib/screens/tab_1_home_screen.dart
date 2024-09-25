@@ -6,6 +6,7 @@ import 'package:fitforalegend_provider/const/app_network_image.dart';
 import 'package:fitforalegend_provider/provider/favorite_products_provider.dart';
 import 'package:fitforalegend_provider/provider/home_provider.dart';
 import 'package:fitforalegend_provider/provider/user_profile_provider.dart';
+import 'package:fitforalegend_provider/screens/see_all_categories_screen.dart';
 import 'package:fitforalegend_provider/services/api_urls.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class _Tab1HomeScreenState extends State<Tab1HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.colorWhite,
       body: Consumer<HomeProvider>(builder: (context, provider, __) {
         if (provider.bannerLoading) {
           return const Center(child: CircularProgressIndicator());
@@ -64,11 +66,11 @@ class _Tab1HomeScreenState extends State<Tab1HomeScreen> {
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 15),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
                       child: Row(
                         children: [
-                          Expanded(
+                          const Expanded(
                               child: Text(
                             'Categories',
                             style: TextStyle(
@@ -76,12 +78,19 @@ class _Tab1HomeScreenState extends State<Tab1HomeScreen> {
                                 fontFamily: AppFonts.poppinsSemiBold,
                                 fontSize: 15),
                           )),
-                          Text(
-                            'See All',
-                            style: TextStyle(
-                                color: AppColors.colorBlack,
-                                fontFamily: AppFonts.poppinsRegular,
-                                fontSize: 12),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SeeAllCategoriesScreen()));
+                            },
+                            child: const Text(
+                              'See All',
+                              style: TextStyle(
+                                  color: AppColors.colorBlack,
+                                  fontFamily: AppFonts.poppinsRegular,
+                                  fontSize: 12),
+                            ),
                           )
                         ],
                       ),
@@ -232,7 +241,10 @@ class _Tab1HomeScreenState extends State<Tab1HomeScreen> {
                                         builder: (context, likeProvider, __) {
                                       return GestureDetector(
                                         onTap: () {
-                                          final favoriteProvider = Provider.of<FavoriteProvider>(context, listen: false);
+                                          final favoriteProvider =
+                                              Provider.of<FavoriteProvider>(
+                                                  context,
+                                                  listen: false);
                                           favoriteProvider.onLikeTap(
                                             products?.id ?? '',
                                             products?.isFavourite ?? '',

@@ -22,7 +22,7 @@ class UserProfileProvider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    res = await Api.userProfileApi();
+    res = await Api.getUserProfile();
     if (res.status == true) {
       setValues();
     } else {}

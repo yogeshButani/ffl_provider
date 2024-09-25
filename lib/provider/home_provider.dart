@@ -47,7 +47,7 @@ class HomeProvider extends ChangeNotifier {
       'user_id': userId,
     };
 
-    res = await Api.homeApi(body: params);
+    res = await Api.home(body: params);
     bannerLoading = false;
     if (res.status == true) {
       /// For banners

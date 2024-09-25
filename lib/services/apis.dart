@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:fitforalegend_provider/const/utils.dart';
+import 'package:fitforalegend_provider/models/response_categories.dart';
 import 'package:fitforalegend_provider/models/response_get_user_profile.dart';
 import 'package:fitforalegend_provider/models/response_home.dart';
 import 'package:fitforalegend_provider/services/api_methods.dart';
@@ -20,7 +21,7 @@ class Api {
 
   Api._internal();
 
-  static Future<Map<String, dynamic>> loginApi(
+  static Future<Map<String, dynamic>> login(
       Map<String, dynamic> body) async {
     var header = ApiMethods.getHeaderWithoutToken();
 
@@ -127,7 +128,7 @@ class Api {
     }
   }
 
-  static Future<GetProfileResponse> userProfileApi() async {
+  static Future<GetProfileResponse> getUserProfile() async {
     var header = await ApiMethods.getHeaderWithToken();
 
     String res = await _apiClient.getMethod(
@@ -175,7 +176,7 @@ class Api {
     }
   }
 
-  static Future<HomeResponse> homeApi({
+  static Future<HomeResponse> home({
     required Map<String, String> body,
   }) async {
     var header = ApiMethods.getHeaderWithoutToken();
@@ -217,6 +218,29 @@ class Api {
       }
     } else {
       return {};
+    }
+  }
+
+
+  static Future<CategoryResponse> getCategories() async {
+    var header = ApiMethods.getHeaderWithoutToken();
+
+    String res = await _apiClient.getMethod(
+      method: ApiServices.categoryApi,
+      body: {},
+      header: header,
+    );
+    debugPrint('token is>>${header.toString()}');
+    log('getCategories response: $res');
+
+    if (res.isNotEmpty) {
+      try {
+        return CategoryResponse.fromJson(json.decode(res));
+      } catch (e) {
+        return CategoryResponse(status: false, message: 'Something went wrong');
+      }
+    } else {
+      return CategoryResponse(status: false, message: 'Something went wrong');
     }
   }
 

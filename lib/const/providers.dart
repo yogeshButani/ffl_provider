@@ -1,3 +1,4 @@
+import 'package:fitforalegend_provider/provider/categories_provider.dart';
 import 'package:fitforalegend_provider/provider/dasboard_bottombar_provider.dart';
 import 'package:fitforalegend_provider/provider/favorite_products_provider.dart';
 import 'package:fitforalegend_provider/provider/home_provider.dart';
@@ -26,6 +27,7 @@ class AppProviders {
         ChangeNotifierProvider(create: (_) => UserProfileProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+        ChangeNotifierProvider(create: (_) => CategoriesProvider()),
         // Add more providers as needed
       ],
       child: child,

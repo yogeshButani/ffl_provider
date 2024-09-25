@@ -49,7 +49,7 @@ class LoginProvider extends ChangeNotifier {
       'device_type': 'android',
       'time_zone': 'Asia/Kolkata',
     };
-    var jsonResponse = await Api.loginApi(body);
+    var jsonResponse = await Api.login(body);
     isLoading = false;
     if (jsonResponse['status'] == true) {
       log('jsonResponse success>>>${jsonResponse.toString()}');
