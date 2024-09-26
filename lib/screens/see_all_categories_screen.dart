@@ -37,6 +37,11 @@ class _SeeAllCategoriesScreenState extends State<SeeAllCategoriesScreen> {
         if (provider.isLoading) {
           return const Center(child: CircularProgressIndicator());
         }
+        if (provider.res.data?.isEmpty ?? true) {
+          return const Center(
+            child: Text('No Data Found'),
+          );
+        }
         return Padding(
           padding: const EdgeInsets.only(top: 15),
           child: GridView.builder(

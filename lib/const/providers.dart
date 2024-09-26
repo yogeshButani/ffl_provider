@@ -4,9 +4,11 @@ import 'package:fitforalegend_provider/provider/favorite_products_provider.dart'
 import 'package:fitforalegend_provider/provider/home_provider.dart';
 import 'package:fitforalegend_provider/provider/login_provider.dart';
 import 'package:fitforalegend_provider/provider/onboarding_provider.dart';
+import 'package:fitforalegend_provider/provider/products_by_categories_provider.dart';
 import 'package:fitforalegend_provider/provider/register_verification_provider.dart';
 import 'package:fitforalegend_provider/provider/shared_preferences_provider.dart';
 import 'package:fitforalegend_provider/provider/splash_provider.dart';
+import 'package:fitforalegend_provider/provider/sub_categories_provider.dart';
 import 'package:fitforalegend_provider/provider/user_profile_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +30,8 @@ class AppProviders {
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         ChangeNotifierProvider(create: (_) => CategoriesProvider()),
+        ChangeNotifierProvider(create: (_) => SubCategoriesProvider()),
+        ChangeNotifierProvider(create: (_) => ProductsByCategoriesProvider()),
         // Add more providers as needed
       ],
       child: child,

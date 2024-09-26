@@ -4,8 +4,10 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:fitforalegend_provider/const/utils.dart';
 import 'package:fitforalegend_provider/models/response_categories.dart';
+import 'package:fitforalegend_provider/models/response_child_categories.dart';
 import 'package:fitforalegend_provider/models/response_get_user_profile.dart';
 import 'package:fitforalegend_provider/models/response_home.dart';
+import 'package:fitforalegend_provider/models/response_sub_categories.dart';
 import 'package:fitforalegend_provider/services/api_methods.dart';
 import 'package:fitforalegend_provider/services/api_urls.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,8 +23,7 @@ class Api {
 
   Api._internal();
 
-  static Future<Map<String, dynamic>> login(
-      Map<String, dynamic> body) async {
+  static Future<Map<String, dynamic>> login(Map<String, dynamic> body) async {
     var header = ApiMethods.getHeaderWithoutToken();
 
     String res = await _apiClient.postMethod(
@@ -221,7 +222,6 @@ class Api {
     }
   }
 
-
   static Future<CategoryResponse> getCategories() async {
     var header = ApiMethods.getHeaderWithoutToken();
 
@@ -241,6 +241,57 @@ class Api {
       }
     } else {
       return CategoryResponse(status: false, message: 'Something went wrong');
+    }
+  }
+
+  static Future<SubCategoryResponse> getSubCategories(
+      {required Map<String, String> body}) async {
+    var header = ApiMethods.getHeaderWithoutToken();
+
+    String res = await _apiClient.getMethod(
+      method: ApiServices.subCategoryApi,
+      body: body,
+      header: header,
+    );
+    debugPrint('token is>>${header.toString()}');
+    log('getCategories response: $res');
+
+    if (res.isNotEmpty) {
+      try {
+        return SubCategoryResponse.fromJson(json.decode(res));
+      } catch (e) {
+        return SubCategoryResponse(
+            status: false, message: 'Something went wrong');
+      }
+    } else {
+      return SubCategoryResponse(
+          status: false, message: 'Something went wrong');
+    }
+  }
+
+
+  static Future<ChildCategoryResponse> getChildCategoriesAndProducts(
+      {required Map<String, String> body}) async {
+    var header = ApiMethods.getHeaderWithoutToken();
+
+    String res = await _apiClient.getMethod(
+      method: ApiServices.childCategory,
+      body: body,
+      header: header,
+    );
+    debugPrint('token is>>${header.toString()}');
+    log('getCategories response: $res');
+
+    if (res.isNotEmpty) {
+      try {
+        return ChildCategoryResponse.fromJson(json.decode(res));
+      } catch (e) {
+        return ChildCategoryResponse(
+            status: false, message: 'Something went wrong');
+      }
+    } else {
+      return ChildCategoryResponse(
+          status: false, message: 'Something went wrong');
     }
   }
 

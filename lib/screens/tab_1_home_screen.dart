@@ -3,6 +3,7 @@ import 'package:fitforalegend_provider/const/app_colors.dart';
 import 'package:fitforalegend_provider/const/app_fonts.dart';
 import 'package:fitforalegend_provider/const/app_grid_view.dart';
 import 'package:fitforalegend_provider/const/app_network_image.dart';
+import 'package:fitforalegend_provider/provider/categories_provider.dart';
 import 'package:fitforalegend_provider/provider/favorite_products_provider.dart';
 import 'package:fitforalegend_provider/provider/home_provider.dart';
 import 'package:fitforalegend_provider/provider/user_profile_provider.dart';
@@ -110,38 +111,47 @@ class _Tab1HomeScreenState extends State<Tab1HomeScreen> {
                             var category = provider.res.data?.category?[index];
                             return Padding(
                               padding: const EdgeInsets.only(right: 15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  ClipOval(
-                                    child: AppNetworkImage(
-                                      image:
-                                          '${ApiServices.imageForCategories}${category?.image}',
-                                      height: 50,
-                                      width: 50,
-                                      fit: BoxFit.cover,
-                                      errorWidget: Image.asset(
-                                        AppAssets.errorImage,
+                              child: GestureDetector(
+                                onTap: () => Provider.of<CategoriesProvider>(
+                                  context,
+                                  listen: false,
+                                ).onCategoryTap(
+                                  context,
+                                  category?.id ?? '',
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    ClipOval(
+                                      child: AppNetworkImage(
+                                        image:
+                                            '${ApiServices.imageForCategories}${category?.image}',
                                         height: 50,
                                         width: 50,
                                         fit: BoxFit.cover,
+                                        errorWidget: Image.asset(
+                                          AppAssets.errorImage,
+                                          height: 50,
+                                          width: 50,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: Text(
-                                      category?.name ?? '',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: const TextStyle(
-                                          color: AppColors.colorBlack,
-                                          height: 0,
-                                          fontFamily: AppFonts.poppinsRegular,
-                                          fontSize: 13),
-                                    ),
-                                  )
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Text(
+                                        category?.name ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                            color: AppColors.colorBlack,
+                                            height: 0,
+                                            fontFamily: AppFonts.poppinsRegular,
+                                            fontSize: 13),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           }),
