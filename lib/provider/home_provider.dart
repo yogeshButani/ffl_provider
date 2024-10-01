@@ -62,14 +62,7 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String calculatePriceDifferenceAndPercentage(double sp, double cp) {
-    double difference = cp - sp;
-    double percentage = (difference / cp) * 100;
-    String formattedDifference = difference.toStringAsFixed(2);
-    String formattedPercentage = percentage.toStringAsFixed(2);
-    String result = "You Save: $formattedDifference ($formattedPercentage)%";
-    return result;
-  }
+
 
   void updateFavoriteStatus(String productId, String isFavorite) {
     res.data?.flashsale?.firstWhere((product) => product.id.toString() == productId.toString()).isFavourite = isFavorite;

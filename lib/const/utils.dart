@@ -58,6 +58,15 @@ class Utility {
     return image;
   }
 
+  static String calculatePriceDifferenceAndPercentage(double sp, double cp) {
+    double difference = cp - sp;
+    double percentage = (difference / cp) * 100;
+    String formattedDifference = difference.toStringAsFixed(2);
+    String formattedPercentage = percentage.toStringAsFixed(2);
+    String result = "You Save: $formattedDifference ($formattedPercentage)%";
+    return result;
+  }
+
   getToast(msg) {
     Fluttertoast.showToast(
       backgroundColor: AppColors.colorBlack,

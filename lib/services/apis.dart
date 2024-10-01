@@ -156,6 +156,7 @@ class Api {
     required Map<String, String> body,
     required List<MultipartFile> files,
     required String mapKeyFile,
+    required Function(int, int) onSendProgress,
   }) async {
     var header = await ApiMethods.getHeaderWithToken();
 
@@ -164,6 +165,7 @@ class Api {
       body: body,
       files: files,
       mapKeyFile: mapKeyFile,
+      onSendProgress: onSendProgress,
       header: header,
     );
     if (res.isNotEmpty) {

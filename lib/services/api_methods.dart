@@ -4,11 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:fitforalegend_provider/const/utils.dart';
 import 'package:fitforalegend_provider/services/api_urls.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ApiMethods {
   static final ApiMethods _apiClient = ApiMethods._internal();
   final dio = Dio();
+
   factory ApiMethods() {
     return _apiClient;
   }
@@ -128,6 +130,7 @@ class ApiMethods {
     required Map<String, String> body,
     required List<MultipartFile> files,
     required String mapKeyFile,
+    required Function(int, int) onSendProgress,
     required Map<String, String> header,
   }) async {
     if (await Utility().isInternetConnected()) {
@@ -146,13 +149,13 @@ class ApiMethods {
             debugPrint('Adding file: ${file.filename}');
           }
         }
-
         debugPrint('FormData: ${formData.fields.toString()}');
         debugPrint('FormData Files: ${formData.files.toString()}');
 
         final response = await dio.post(
           method,
           data: formData,
+          onSendProgress: onSendProgress,
           options: Options(
             headers: {
               ...header,
@@ -187,7 +190,7 @@ class ApiMethods {
         log('Request files: ${request.files}');
          */
         http.Response result =
-        await http.Response.fromStream(await request.send());
+            await http.Response.fromStream(await request.send());
         /*
         log('${request.url.path} >>>>Response body: ${result.body} <<<<');
          */

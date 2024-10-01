@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 
 class ProductsByCategoriesProvider extends ChangeNotifier {
   ChildCategoryResponse res = ChildCategoryResponse();
+  List<ChildProductsList> productsList = [];
 
   bool childCategoryLoading = false;
   bool productsLoading = false;
 
-  onChildCategoryTap(int index) {
+  onChildCategoryTap(int index, String categoryId, String subCategoryId) {
     var childCategoryList = res.data ?? [];
 
     if (index == 0) {
@@ -41,27 +42,38 @@ class ProductsByCategoriesProvider extends ChangeNotifier {
           return previousValue;
         }
       });
-
+      debugPrint('count>>>$count');
       if (count == 0) {
         childCategoryList.first.selected = true;
+        debugPrint('All selected after de-select other items');
       }
     }
+    getChildCategoriesAndProductsApi(subCategoryId: subCategoryId, categoryId: categoryId);
+    childCategoryLoading = false;
     notifyListeners();
   }
+
 
   Future<void> getChildCategoriesAndProductsApi({
     required String subCategoryId,
     required String categoryId,
-    required String childCategoryId,
   }) async {
     String userId = await StorageManager.readData(AppStorage.userId) ?? '';
     childCategoryLoading = true;
     productsLoading = true;
+    List<String> selectedCategoryId = [];
+    for (var element in res.data ?? []) {
+      if ((element.selected ?? false) &&
+          !(element.name?.toLowerCase() == 'all')) {
+        selectedCategoryId.add(element.id ?? '');
+      }
+    }
+    debugPrint('selectedCategoryId>>${selectedCategoryId.length}');
     notifyListeners();
     Map<String, String> body = {
       'subcat_id': subCategoryId,
       'cat_id': categoryId,
-      'childcate_id': childCategoryId,
+      'childcate_id': selectedCategoryId.join(','),
       'user_id': userId,
       'brand_id': '',
       'color_id': '',
@@ -75,6 +87,7 @@ class ProductsByCategoriesProvider extends ChangeNotifier {
     childCategoryLoading = false;
     productsLoading = false;
     if (res.status == true) {
+      productsList.clear();
       res.data?.insert(
         0,
         ChildCategoryList(
@@ -83,9 +96,19 @@ class ProductsByCategoriesProvider extends ChangeNotifier {
           selected: true,
         ),
       );
+
+      for (var childCategory in res.data ?? []) {
+        for (var product in childCategory.product ?? []) {
+          productsList.add(product);
+        }
+      }
     } else {
       Utility().getToast(res.message);
     }
+    notifyListeners();
+  }
+  void updateFavoriteStatus(String productId, String isFavorite) {
+    productsList.firstWhere((product) => product.id.toString() == productId.toString()).isFavourite = isFavorite;
     notifyListeners();
   }
 }

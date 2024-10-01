@@ -3,6 +3,7 @@ import 'package:fitforalegend_provider/const/app_colors.dart';
 import 'package:fitforalegend_provider/const/app_fonts.dart';
 import 'package:fitforalegend_provider/const/app_grid_view.dart';
 import 'package:fitforalegend_provider/const/app_network_image.dart';
+import 'package:fitforalegend_provider/const/utils.dart';
 import 'package:fitforalegend_provider/provider/categories_provider.dart';
 import 'package:fitforalegend_provider/provider/favorite_products_provider.dart';
 import 'package:fitforalegend_provider/provider/home_provider.dart';
@@ -325,8 +326,7 @@ class _Tab1HomeScreenState extends State<Tab1HomeScreen> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          provider
-                                              .calculatePriceDifferenceAndPercentage(
+                                          Utility.calculatePriceDifferenceAndPercentage(
                                                   double.parse(
                                                       products?.sellingPrice ??
                                                           ''),
