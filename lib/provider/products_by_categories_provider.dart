@@ -12,9 +12,10 @@ class ProductsByCategoriesProvider extends ChangeNotifier {
   bool childCategoryLoading = false;
   bool productsLoading = false;
 
-  onChildCategoryTap(int index, String categoryId, String subCategoryId) {
-    var childCategoryList = res.data ?? [];
+  List<ChildCategoryList> childCategoryList = [];
 
+  onChildCategoryTap(int index, String categoryId, String subCategoryId) {
+    childCategoryLoading = false;
     if (index == 0) {
       debugPrint('!!!!!>');
       if (!(childCategoryList[index].selected ?? false)) {
@@ -48,11 +49,12 @@ class ProductsByCategoriesProvider extends ChangeNotifier {
         debugPrint('All selected after de-select other items');
       }
     }
-    getChildCategoriesAndProductsApi(subCategoryId: subCategoryId, categoryId: categoryId);
-    childCategoryLoading = false;
+
+    getChildCategoriesAndProductsApi(
+        subCategoryId: subCategoryId, categoryId: categoryId);
+
     notifyListeners();
   }
-
 
   Future<void> getChildCategoriesAndProductsApi({
     required String subCategoryId,
@@ -88,14 +90,11 @@ class ProductsByCategoriesProvider extends ChangeNotifier {
     productsLoading = false;
     if (res.status == true) {
       productsList.clear();
-      res.data?.insert(
-        0,
-        ChildCategoryList(
-          id: '',
-          name: "All",
-          selected: true,
-        ),
-      );
+      if (childCategoryList.isEmpty) {
+        childCategoryList
+            .add(ChildCategoryList(id: '', name: "All", selected: true));
+        childCategoryList.addAll(res.data ?? []);
+      }
 
       for (var childCategory in res.data ?? []) {
         for (var product in childCategory.product ?? []) {
@@ -107,8 +106,11 @@ class ProductsByCategoriesProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
   void updateFavoriteStatus(String productId, String isFavorite) {
-    productsList.firstWhere((product) => product.id.toString() == productId.toString()).isFavourite = isFavorite;
+    productsList
+        .firstWhere((product) => product.id.toString() == productId.toString())
+        .isFavourite = isFavorite;
     notifyListeners();
   }
 }

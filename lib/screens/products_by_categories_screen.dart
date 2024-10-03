@@ -61,45 +61,45 @@ class _ProductsByCategoriesScreenState
                   visible: provider.childCategoryLoading == false,
                   replacement: const CircularProgressIndicator(),
                   child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: provider.res.data?.length,
-                      padding: EdgeInsets.zero,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        var childCategory = provider.res.data?[index];
-                        return GestureDetector(
-                          onTap: () => provider.onChildCategoryTap(
-                              index, widget.categoryId, widget.subCategoryId),
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 7),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: childCategory?.selected == true
-                                    ? AppColors.color17C6AA
-                                    : AppColors.colorWhite,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(
-                                    color: childCategory?.selected == true
-                                        ? Colors.transparent
-                                        : AppColors.colorTextFieldBorder)),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: Text(
-                                childCategory?.name ?? '',
-                                style: TextStyle(
-                                  color: childCategory?.selected == true
-                                      ? AppColors.colorWhite
-                                      : AppColors.colorBlack,
-                                  fontSize: 15,
-                                  fontFamily: AppFonts.poppinsRegular,
-                                ),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: provider.childCategoryList.length,
+                    padding: EdgeInsets.zero,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      var childCategory = provider.childCategoryList[index];
+                      return GestureDetector(
+                        onTap: () => provider.onChildCategoryTap(
+                            index, widget.categoryId, widget.subCategoryId),
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 7),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: childCategory.selected == true
+                                  ? AppColors.color17C6AA
+                                  : AppColors.colorWhite,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                  color: childCategory.selected == true
+                                      ? Colors.transparent
+                                      : AppColors.colorTextFieldBorder)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Text(
+                              childCategory.name ?? '',
+                              style: TextStyle(
+                                color: childCategory.selected == true
+                                    ? AppColors.colorWhite
+                                    : AppColors.colorBlack,
+                                fontSize: 15,
+                                fontFamily: AppFonts.poppinsRegular,
                               ),
                             ),
                           ),
-                        );
-                      }),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -229,7 +229,7 @@ class _ProductsByCategoriesScreenState
                                   ),
                                 ),
                                 Text(
-                                  '\$${products?.costPrice ?? ''}',
+                                  '\$${products.costPrice ?? ''}',
                                   style: const TextStyle(
                                       decoration: TextDecoration.lineThrough,
                                       fontSize: 12,
@@ -244,7 +244,7 @@ class _ProductsByCategoriesScreenState
                             child: Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                '\$${products?.sellingPrice ?? ''}',
+                                '\$${products.sellingPrice ?? ''}',
                                 style: const TextStyle(
                                     fontSize: 13,
                                     fontFamily: AppFonts.poppinsSemiBold,
